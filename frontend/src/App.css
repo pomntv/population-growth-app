@@ -1,56 +1,24 @@
-.App {
-  text-align: center;
-}
-
-h1 {
-  margin-bottom: 20px;
-}
-
-.scroll-container {
+.horizontal-scroll {
   display: flex;
   overflow-x: auto;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-}
-
-.scroll-button {
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  font-size: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.scroll-button:hover {
-  background-color: #0056b3;
+  white-space: nowrap;
 }
 
 .year-button {
-  background-color: #f0f0f0;
+  padding: 8px 16px;
+  margin-right: 10px;
   border: none;
-  border-radius: 8px;
-  padding: 10px 20px;
-  margin: 0 10px;
-  font-size: 18px;
+  background-color: transparent;
   cursor: pointer;
+  outline: none;
   transition: background-color 0.3s;
+}
+
+.year-button:hover {
+  background-color: #ddd;
 }
 
 .year-button.selected {
   background-color: #007bff;
   color: #fff;
 }
-
-.year-button:hover {
-  background-color: #ccc;
-}
-
-/* Add any other styling as needed */

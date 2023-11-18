@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import './App.css';
 import PopulationChart from './PopulationChart';
 
@@ -7,6 +7,8 @@ function App() {
     const [selectedYear, setSelectedYear] = useState(1950); // Default selected year
     const [sortType, setSortType] = useState('maxPopulation'); // Default sort type set to 'maxPopulation'
     const [showTop10, setShowTop10] = useState(true); // Default set to show top 10 countries
+    const [isPlaying, setIsPlaying] = useState(false); // Flag to indicate if the animation is playing
+    const scrollRef = useRef(null); // Reference to the scroll container
 
     useEffect(() => {
         // Fetch data from your API or source here and set it to the 'data' state
@@ -21,8 +23,45 @@ function App() {
             });
     }, []);
 
+    useEffect(() => {
+        // Scroll to the selected year when it changes
+        if (scrollRef.current) {
+            const selectedButton = scrollRef.current.querySelector(`.year-button[data-year="${selectedYear}"]`);
+            if (selectedButton) {
+                const scrollX = selectedButton.offsetLeft - (scrollRef.current.clientWidth - selectedButton.clientWidth) / 2;
+                scrollRef.current.scrollTo({
+                    left: scrollX,
+                    behavior: 'smooth',
+                });
+            }
+        }
+    }, [selectedYear]);
+
     // Create an array of unique years for the scroll bar
     const uniqueYears = [...new Set(data.map((item) => item.year))];
+
+    // Function to handle the play button click
+    const handlePlayClick = () => {
+    if (!isPlaying) {
+        setIsPlaying(true);
+        setSelectedYear(1950); // Reset selected year to 1950
+        scrollRef.current.scrollTo({
+            left: 0, // Reset scroll position to the beginning
+            behavior: 'smooth',
+        });
+
+        let currentYear = 1950; // Start from 1950
+        const interval = setInterval(() => {
+            if (currentYear < 2021) {
+                currentYear += 1;
+                setSelectedYear(currentYear);
+            } else {
+                clearInterval(interval);
+                setIsPlaying(false);
+            }
+        }, 350); // Change year (milliseconds)
+    }
+};
 
     // Filter data by the selected year
     const filteredData = data.filter((item) => item.year === selectedYear);
@@ -62,22 +101,22 @@ function App() {
                 )}
             </div>
             <div className="scroll-container">
-                <button className="scroll-button" onClick={() => setSelectedYear(selectedYear - 1)}>
-                    &lt;
-                </button>
-                {uniqueYears.map((year) => (
-                    <button
-                        key={year}
-                        className={`year-button ${year === selectedYear ? 'selected' : ''}`}
-                        onClick={() => setSelectedYear(year)}
-                    >
-                        {year}
-                    </button>
-                ))}
-                <button className="scroll-button" onClick={() => setSelectedYear(selectedYear + 1)}>
-                    &gt;
-                </button>
+                <div className="horizontal-scroll" ref={scrollRef}>
+                    {uniqueYears.map((year) => (
+                        <button
+                            key={year}
+                            className={`year-button ${year === selectedYear ? 'selected' : ''}`}
+                            data-year={year}
+                            onClick={() => setSelectedYear(year)}
+                        >
+                            {year}
+                        </button>
+                    ))}
+                </div>
             </div>
+            <button onClick={handlePlayClick} disabled={isPlaying}>
+                {isPlaying ? 'Playing...' : 'Play Animation'}
+            </button>
             <PopulationChart data={modifiedData} selectedYear={selectedYear} sortType={sortType} />
         </div>
     );
