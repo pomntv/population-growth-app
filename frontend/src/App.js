@@ -9,6 +9,10 @@ function App() {
     const [showTop10, setShowTop10] = useState(true); // Default set to show top 10 countries
     const [isPlaying, setIsPlaying] = useState(false); // Flag to indicate if the animation is playing
     const scrollRef = useRef(null); // Reference to the scroll container
+    const [animationInterval, setAnimationInterval] = useState(null); // Store the animation interval ID
+
+    // Define uniqueYears outside of the return function
+    const uniqueYears = [...new Set(data.map((item) => item.year))];
 
     useEffect(() => {
         // Fetch data from your API or source here and set it to the 'data' state
@@ -37,31 +41,39 @@ function App() {
         }
     }, [selectedYear]);
 
-    // Create an array of unique years for the scroll bar
-    const uniqueYears = [...new Set(data.map((item) => item.year))];
-
     // Function to handle the play button click
     const handlePlayClick = () => {
-    if (!isPlaying) {
-        setIsPlaying(true);
-        setSelectedYear(1950); // Reset selected year to 1950
-        scrollRef.current.scrollTo({
-            left: 0, // Reset scroll position to the beginning
-            behavior: 'smooth',
-        });
+        if (!isPlaying) {
+            setIsPlaying(true);
+            setSelectedYear(1950); // Reset selected year to 1950
+            scrollRef.current.scrollTo({
+                left: 0, // Reset scroll position to the beginning
+                behavior: 'smooth',
+            });
 
-        let currentYear = 1950; // Start from 1950
-        const interval = setInterval(() => {
-            if (currentYear < 2021) {
-                currentYear += 1;
-                setSelectedYear(currentYear);
-            } else {
-                clearInterval(interval);
-                setIsPlaying(false);
-            }
-        }, 350); // Change year (milliseconds)
-    }
-};
+            let currentYear = 1950; // Start from 1950
+            const interval = setInterval(() => {
+                if (currentYear < 2021) {
+                    currentYear += 1;
+                    setSelectedYear(currentYear);
+                } else {
+                    clearInterval(interval);
+                    setIsPlaying(false);
+                }
+            }, 350); // Change year (milliseconds)
+
+            // Store the animation interval ID
+            setAnimationInterval(interval);
+        }
+    };
+
+    // Function to handle the stop button click
+    const handleStopClick = () => {
+        if (animationInterval) {
+            clearInterval(animationInterval); // Clear the animation interval
+            setIsPlaying(false); // Stop the animation
+        }
+    };
 
     // Filter data by the selected year
     const filteredData = data.filter((item) => item.year === selectedYear);
@@ -117,6 +129,9 @@ function App() {
             <button onClick={handlePlayClick} disabled={isPlaying}>
                 {isPlaying ? 'Playing...' : 'Play Animation'}
             </button>
+            {isPlaying ? (
+                <button onClick={handleStopClick}>Stop</button>
+            ) : null}
             <PopulationChart data={modifiedData} selectedYear={selectedYear} sortType={sortType} />
         </div>
     );

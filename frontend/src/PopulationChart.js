@@ -37,7 +37,7 @@ const PopulationChart = ({ data, selectedYear, sortType }) => {
         scales: {
             x: {
                 beginAtZero: true,
-                max: 8000000000,
+                // max: 8000000000,
             },
         },
     };
