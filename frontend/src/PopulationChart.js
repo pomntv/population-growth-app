@@ -4,16 +4,29 @@ import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Toolti
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const PopulationChart = ({ data, selectedYear }) => {
+const PopulationChart = ({ data, selectedYear, sortType }) => {
     // Filter data by the selected year
     const filteredData = data.filter((item) => item.year === selectedYear);
 
+    // Function to sort the data based on the selected sort type
+    const sortData = (data) => {
+        if (sortType === 'alphabetical') {
+            return [...data].sort((a, b) => a.countryName.localeCompare(b.countryName));
+        } else if (sortType === 'maxPopulation') {
+            return [...data].sort((a, b) => b.population - a.population);
+        }
+        return data;
+    };
+
+    // Sort the filtered data
+    const sortedData = sortData(filteredData);
+
     const chartData = {
-        labels: filteredData.map(item => item.countryName),
+        labels: sortedData.map(item => item.countryName),
         datasets: [
             {
                 label: 'Population',
-                data: filteredData.map(item => item.population),
+                data: sortedData.map(item => item.population),
                 backgroundColor: 'rgba(75, 192, 192, 0.6)',
             },
         ],
