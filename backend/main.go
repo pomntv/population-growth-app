@@ -17,7 +17,7 @@ var client *mongo.Client
 
 func InitializeService() {
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
-	clientOptions := options.Client().ApplyURI("mongodb+srv://pompoke:pompoke11501112@cluster0.nooipqq.mongodb.net/Popuation_growth?retryWrites=true&w=majority")
+	clientOptions := options.Client().ApplyURI("mongodb+srv://render:render1234@cluster0.nooipqq.mongodb.net/Popuation_growth?retryWrites=true&w=majority")
 	var err error
 	client, err = mongo.Connect(ctx, clientOptions)
 	if err != nil {
