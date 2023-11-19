@@ -8,19 +8,70 @@ const PopulationChart = ({ data, selectedYear, sortType, selectedMode }) => {
     const filteredData = data.filter((item) => item.year === selectedYear);
 
     const sortData = (data) => {
-        if (sortType === 'alphabetical') {
-            return [...data].sort((a, b) => a.countryName.localeCompare(b.countryName));
-        } else if (sortType === 'maxPopulation') {
-            return [...data].sort((a, b) => b.population - a.population);
+        switch (sortType) {
+            case 'alphabetical':
+                return [...data].sort((a, b) => a.countryName.localeCompare(b.countryName));
+            case 'maxPopulation':
+                return [...data].sort((a, b) => {
+                    switch (selectedMode) {
+                        case 'Population':
+                            return b.population - a.population;
+                        case 'PopulationChildrenUnder1':
+                            return b.populationChildrenUnder1 - a.populationChildrenUnder1;
+                        case 'PopulationChildrenUnder5':
+                            return b.populationChildrenUnder5 - a.populationChildrenUnder5;
+                        case 'PopulationChildrenUnder15':
+                            return b.populationChildrenUnder15 - a.populationChildrenUnder15;
+                        case 'PopulationUnder25':
+                            return b.populationUnder25 - a.populationUnder25;
+                        case 'PopulationAged15To64':
+                            return b.populationAged15To64 - a.populationAged15To64;
+                        case 'PopulationOlderThan15':
+                            return b.populationOlderThan15 - a.populationOlderThan15;
+                        case 'PopulationOlderThan18':
+                            return b.populationOlderThan18 - a.populationOlderThan18;
+                        case 'PopulationAtAge1':
+                            return b.populationAtAge1 - a.populationAtAge1;
+                        case 'PopulationAged1To4':
+                            return b.populationAged1To4 - a.populationAged1To4;
+                        case 'PopulationAged5To14':
+                            return b.populationAged5To14 - a.populationAged5To14;
+                        case 'PopulationAged10To24':
+                            return b.populationAged10To24 - a.populationAged10To24;
+                        case 'PopulationAged15To19':
+                            return b.populationAged15To19 - a.populationAged15To19;
+                        case 'PopulationAged20To29':
+                            return b.populationAged20To29 - a.populationAged20To29;
+                        case 'PopulationAged30To39':
+                            return b.populationAged30To39 - a.populationAged30To39;
+                        case 'PopulationAged40To49':
+                            return b.populationAged40To49 - a.populationAged40To49;
+                        case 'PopulationAged50To59':
+                            return b.populationAged50To59 - a.populationAged50To59;
+                        case 'PopulationAged60To69':
+                            return b.populationAged60To69 - a.populationAged60To69;
+                        case 'PopulationAged70To79':
+                            return b.populationAged70To79 - a.populationAged70To79;
+                        case 'PopulationAged80To89':
+                            return b.populationAged80To89 - a.populationAged80To89;
+                        case 'PopulationAged90To99':
+                            return b.populationAged90To99 - a.populationAged90To99;
+                        case 'PopulationOlderThan100':
+                            return b.populationOlderThan100 - a.populationOlderThan100;
+                        default:
+                            return 0;
+                    }
+                });
+            default:
+                return data;
         }
-        return data;
     };
 
     const sortedData = sortData(filteredData);
 
     let label = '';
     let chartDataArray = [];
-
+    
     if (selectedMode === 'Population') {
         label = 'Population';
         chartDataArray = sortedData.map((item) => item.population);
