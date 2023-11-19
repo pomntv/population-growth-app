@@ -4,19 +4,17 @@ import PopulationChart from './PopulationChart';
 
 function App() {
     const [data, setData] = useState([]);
-    const [selectedYear, setSelectedYear] = useState(1950); // Default selected year
-    const [sortType, setSortType] = useState('maxPopulation'); // Default sort type set to 'maxPopulation'
-    const [showTop10, setShowTop10] = useState(true); // Default set to show top 10 countries
-    const [isPlaying, setIsPlaying] = useState(false); // Flag to indicate if the animation is playing
-    const scrollRef = useRef(null); // Reference to the scroll container
-    const [animationInterval, setAnimationInterval] = useState(null); // Store the animation interval ID
+    const [selectedYear, setSelectedYear] = useState(1950);
+    const [sortType, setSortType] = useState('maxPopulation');
+    const [showTop10, setShowTop10] = useState(true);
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [selectedMode, setSelectedMode] = useState('Population'); // Default mode set to 'Population'
+    const scrollRef = useRef(null);
+    const [animationInterval, setAnimationInterval] = useState(null);
 
-    // Define uniqueYears outside of the return function
     const uniqueYears = [...new Set(data.map((item) => item.year))];
 
     useEffect(() => {
-        // Fetch data from your API or source here and set it to the 'data' state
-        // Replace this with your actual data fetching logic
         fetch('http://localhost:8081/api/population')
             .then((response) => response.json())
             .then((data) => {
@@ -28,7 +26,6 @@ function App() {
     }, []);
 
     useEffect(() => {
-        // Scroll to the selected year when it changes
         if (scrollRef.current) {
             const selectedButton = scrollRef.current.querySelector(`.year-button[data-year="${selectedYear}"]`);
             if (selectedButton) {
@@ -41,17 +38,16 @@ function App() {
         }
     }, [selectedYear]);
 
-    // Function to handle the play button click
     const handlePlayClick = () => {
         if (!isPlaying) {
             setIsPlaying(true);
-            setSelectedYear(1950); // Reset selected year to 1950
+            setSelectedYear(1950);
             scrollRef.current.scrollTo({
-                left: 0, // Reset scroll position to the beginning
+                left: 0,
                 behavior: 'smooth',
             });
 
-            let currentYear = 1950; // Start from 1950
+            let currentYear = 1950;
             const interval = setInterval(() => {
                 if (currentYear < 2021) {
                     currentYear += 1;
@@ -60,38 +56,37 @@ function App() {
                     clearInterval(interval);
                     setIsPlaying(false);
                 }
-            }, 350); // Change year (milliseconds)
+            }, 350);
 
-            // Store the animation interval ID
             setAnimationInterval(interval);
         }
     };
 
-    // Function to handle the stop button click
     const handleStopClick = () => {
         if (animationInterval) {
-            clearInterval(animationInterval); // Clear the animation interval
-            setIsPlaying(false); // Stop the animation
+            clearInterval(animationInterval);
+            setIsPlaying(false);
         }
     };
 
-    // Function to handle year range input change
     const handleYearRangeChange = (e) => {
         setSelectedYear(parseInt(e.target.value));
     };
 
-    // Filter data by the selected year
+    const handleModeChange = (e) => {
+        setSelectedMode(e.target.value);
+    };
+
     const filteredData = data.filter((item) => item.year === selectedYear);
 
-    // Apply max value and limit to top 10 countries if the option is enabled
     let modifiedData = filteredData;
     if (sortType === 'maxPopulation' && showTop10) {
         modifiedData = filteredData
-            .sort((a, b) => b.population - a.population) // Sort by population in descending order
-            .slice(0, 10); // Take the top 10 countries
+            .sort((a, b) => b.population - a.population)
+            .slice(0, 10);
         modifiedData = modifiedData.map((item) => ({
             ...item,
-            population: Math.min(item.population, 8000000000), // Apply the maximum value of 8,000,000,000
+            population: Math.min(item.population, 8000000000),
         }));
     }
 
@@ -136,6 +131,33 @@ function App() {
             {isPlaying ? (
                 <button onClick={handleStopClick}>Stop</button>
             ) : null}
+            <div className="population-mode">
+                <label htmlFor="modeSelect">Population Mode:</label>
+                <select id="modeSelect" value={selectedMode} onChange={handleModeChange}>
+                    <option value="Population">Population</option>
+                    <option value="PopulationChildrenUnder1">Population of children under 1</option>
+                    <option value="PopulationChildrenUnder5">Population of children under 5</option>
+                    <option value="PopulationChildrenUnder15">Population of children under 15</option>
+                    <option value="PopulationUnder25">Population under 25</option>
+                    <option value="PopulationAged15To64">Population aged 15 to 64 years</option>
+                    <option value="PopulationOlderThan15">Population older than 15 years</option>
+                    <option value="PopulationOlderThan18">Population older than 18 years</option>
+                    <option value="PopulationAtAge1">Population at age 1</option>
+                    <option value="PopulationAged1To4">Population aged 1 to 4 years</option>
+                    <option value="PopulationAged5To9">Population aged 5 to 9 years</option>
+                    <option value="PopulationAged10To14">Population aged 10 to 14 years</option>
+                    <option value="PopulationAged15To19">Population aged 15 to 19 years</option>
+                    <option value="PopulationAged20To29">Population aged 20 to 29 years</option>
+                    <option value="PopulationAged30To39">Population aged 30 to 39 years</option>
+                    <option value="PopulationAged40To49">Population aged 40 to 49 years</option>
+                    <option value="PopulationAged50To59">Population aged 50 to 59 years</option>
+                    <option value="PopulationAged60To69">Population aged 60 to 69 years</option>
+                    <option value="PopulationAged70To79">Population aged 70 to 79 years</option>
+                    <option value="PopulationAged80To89">Population aged 80 to 89 years</option>
+                    <option value="PopulationAged90To99">Population aged 90 to 99 years</option>
+                    <option value="PopulationOlderThan100">Population older than 100 years</option>
+                </select>
+            </div>
             <div className="scroll-container">
                 <div className="horizontal-scroll" ref={scrollRef}>
                     {uniqueYears.map((year) => (
@@ -150,7 +172,7 @@ function App() {
                     ))}
                 </div>
             </div>
-            <PopulationChart data={modifiedData} selectedYear={selectedYear} sortType={sortType} className="chart-container" />
+            <PopulationChart data={modifiedData} selectedYear={selectedYear} sortType={sortType} selectedMode={selectedMode} className="chart-container" />
         </div>
     );
 }
