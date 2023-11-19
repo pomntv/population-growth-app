@@ -37,12 +37,18 @@ const PopulationChart = ({ data, selectedYear, sortType }) => {
         scales: {
             x: {
                 beginAtZero: true,
-                // max: 8000000000,
+            },
+            y: {
+                beginAtZero: true,
             },
         },
     };
 
-    return <Bar data={chartData} options={chartOptions} />;
+    return (
+        <div className="chart-container">
+            <Bar data={chartData} options={chartOptions} />
+        </div>
+    );
 };
 
 export default PopulationChart;

@@ -127,12 +127,12 @@ function App() {
                 </div>
             </div>
             <button onClick={handlePlayClick} disabled={isPlaying}>
-                {isPlaying ? 'Playing...' : 'Play Animation'}
+                {isPlaying ? 'Playing...' : 'Play'}
             </button>
             {isPlaying ? (
                 <button onClick={handleStopClick}>Stop</button>
             ) : null}
-            <PopulationChart data={modifiedData} selectedYear={selectedYear} sortType={sortType} />
+            <PopulationChart data={modifiedData} selectedYear={selectedYear} sortType={sortType} className="chart-container" />
         </div>
     );
 }
