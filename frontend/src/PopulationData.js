@@ -7,7 +7,9 @@ const PopulationData = ({ selectedMode }) => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        axios.get('http://localhost:8081/api/population')
+        // axios.get('http://localhost:8081/api/population')
+        axios.get('https://population-growth.onrender.com/api/population')
+
             .then(response => {
                 setData(response.data);
                 setLoading(false);
