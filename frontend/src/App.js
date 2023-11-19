@@ -15,7 +15,9 @@ function App() {
     const uniqueYears = [...new Set(data.map((item) => item.year))];
 
     useEffect(() => {
-        fetch('http://localhost:8081/api/population')
+        // fetch('http://localhost:8081/api/population')
+        
+        fetch('https://population-growth.onrender.com/api/population')
             .then((response) => response.json())
             .then((data) => {
                 setData(data);
