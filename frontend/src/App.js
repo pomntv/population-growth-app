@@ -75,6 +75,11 @@ function App() {
         }
     };
 
+    // Function to handle year range input change
+    const handleYearRangeChange = (e) => {
+        setSelectedYear(parseInt(e.target.value));
+    };
+
     // Filter data by the selected year
     const filteredData = data.filter((item) => item.year === selectedYear);
 
@@ -112,6 +117,25 @@ function App() {
                     </label>
                 )}
             </div>
+            <div className="year-range">
+                <label htmlFor="yearRange">Year Range:</label>
+                <input
+                    type="range"
+                    id="yearRange"
+                    min={1950}
+                    max={2021}
+                    step={1}
+                    value={selectedYear}
+                    onChange={handleYearRangeChange}
+                />
+                <span>{selectedYear}</span>
+            </div>
+            <button onClick={handlePlayClick} disabled={isPlaying}>
+                {isPlaying ? 'Playing...' : 'Play'}
+            </button>
+            {isPlaying ? (
+                <button onClick={handleStopClick}>Stop</button>
+            ) : null}
             <div className="scroll-container">
                 <div className="horizontal-scroll" ref={scrollRef}>
                     {uniqueYears.map((year) => (
@@ -126,12 +150,6 @@ function App() {
                     ))}
                 </div>
             </div>
-            <button onClick={handlePlayClick} disabled={isPlaying}>
-                {isPlaying ? 'Playing...' : 'Play'}
-            </button>
-            {isPlaying ? (
-                <button onClick={handleStopClick}>Stop</button>
-            ) : null}
             <PopulationChart data={modifiedData} selectedYear={selectedYear} sortType={sortType} className="chart-container" />
         </div>
     );
