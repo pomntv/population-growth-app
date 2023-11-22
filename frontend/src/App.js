@@ -20,13 +20,23 @@ function App() {
         fetch('https://population-growth.onrender.com/api/population')
             .then((response) => response.json())
             .then((data) => {
-                setData(data);
+                // Filter out data for non-country entities
+                const OnlycontryData = data.filter((item) => isCountry(item.countryName));
+                setData(OnlycontryData);
             })
             .catch((error) => {
                 console.error('Error fetching data:', error);
             });
     }, []);
+    // Helper function to identify individual countries
+    const isCountry = (countryName) => {
+            // Convert both countryName and keywords to lowercase for case-insensitivity
+        const lowercaseCountryName = countryName.toLowerCase();
+        const excludedKeywords = ['world', 'less', 'more','upper','lower','high','low','least','and','(',')']; // Convert keywords to lowercase
 
+        // Check if lowercaseCountryName includes any of the lowercase keywords
+    return !excludedKeywords.some(keyword => lowercaseCountryName.includes(keyword));
+};
     useEffect(() => {
         if (scrollRef.current) {
             const selectedButton = scrollRef.current.querySelector(`.year-button[data-year="${selectedYear}"]`);
@@ -161,19 +171,21 @@ function App() {
                 </select>
             </div>
             <div className="scroll-container">
-                <div className="horizontal-scroll" ref={scrollRef}>
-                    {uniqueYears.map((year) => (
-                        <button
-                            key={year}
-                            className={`year-button ${year === selectedYear ? 'selected' : ''}`}
-                            data-year={year}
-                            onClick={() => setSelectedYear(year)}
-                        >
-                            {year}
-                        </button>
-                    ))}
-                </div>
-            </div>
+    <div className="horizontal-scroll" ref={scrollRef}>
+        {uniqueYears
+            .sort((a, b) => a - b) // Sort the years in ascending order
+            .map((year) => (
+                <button
+                    key={year}
+                    className={`year-button ${year === selectedYear ? 'selected' : ''}`}
+                    data-year={year}
+                    onClick={() => setSelectedYear(year)}
+                >
+                    {year}
+                </button>
+            ))}
+    </div>
+</div>
             <PopulationChart data={modifiedData} selectedYear={selectedYear} sortType={sortType} selectedMode={selectedMode} className="chart-container" />
         </div>
     );
