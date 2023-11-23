@@ -88,7 +88,82 @@ const PopulationChart = ({ data, selectedYear, sortType, selectedMode }) => {
     };
 
     const sortedData = sortData(filteredData);
-
+    console.log(sortedData);
+    const data = [
+        { countryName
+            : 
+            "China"
+            population
+            : 
+            543979200
+            populationAged1To4
+            : 
+            58816340
+            populationAged5To9
+            : 
+            56990948
+            populationAged10To14
+            : 
+            54296730
+            populationAged15To19
+            : 
+            52148756
+            populationAged15To64
+            : 
+            327285950
+            populationAged20To29
+            : 
+            87191640
+            populationAged30To39
+            : 
+            70759080
+            populationAged40To49
+            : 
+            58621604
+            populationAged50To59
+            : 
+            42353092
+            populationAged60To69
+            : 
+            28395770
+            populationAged70To79
+            : 
+            11921734
+            populationAged80To89
+            : 
+            3136064
+            populationAged90To99
+            : 
+            185990
+            populationAtAge1
+            : 
+            16626031
+            populationChildrenUnder1
+            : 
+            19160980
+            populationChildrenUnder5
+            : 
+            77977320
+            populationChildrenUnder15
+            : 
+            189265000
+            populationOlderThan15
+            : 
+            354713730
+            populationOlderThan18
+            : 
+            322352130
+            populationOlderThan100
+            : 
+            508.00003
+            populationUnder25
+            : 
+            287266180
+            year
+            : 
+            1950 },
+        // Add similar entries for other countries
+      ];
     let label = '';
     let chartDataArray = [];
 
@@ -194,9 +269,29 @@ const PopulationChart = ({ data, selectedYear, sortType, selectedMode }) => {
                 color: '#333',
                 font: {
                     weight: 'bold',
-                    size: 10, 
+                    size: 10,
                 },
                 offset: 0,
+            },
+            afterDraw: (chart) => {
+                const ctx = chart.ctx;
+
+                chart.data.datasets.forEach((dataset, datasetIndex) => {
+                    const meta = chart.getDatasetMeta(datasetIndex);
+                    if (!meta.hidden) {
+                        meta.data.forEach((element, index) => {
+                            // Display flag images on the bars
+                            const img = new Image();
+                            img.src = `https://flagcdn.com/16x12/${sortedData[index].countryCode.toLowerCase()}.png`;
+
+                            const barX = element.x;
+                            const barY = element.y;
+                            const barHeight = element.height;
+
+                            ctx.drawImage(img, barX - 10, barY - 15, 16, 12);
+                        });
+                    }
+                });
             },
         },
     };
