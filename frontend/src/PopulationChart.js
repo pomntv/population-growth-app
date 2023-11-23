@@ -3,10 +3,214 @@ import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
-
+const countryCodes = {
+    "Afghanistan": "AF",
+    "Albania": "AL",
+    "Algeria": "DZ",
+    "American Samoa": "AS",
+    "Angola": "AO",
+    "Anguilla": "AI",
+    "Argentina": "AR",
+    "Armenia": "AM",
+    "Aruba": "AW",
+    "Australia": "AU",
+    "Austria": "AT",
+    "Azerbaijan": "AZ",
+    "Bahamas": "BS",
+    "Bahrain": "BH",
+    "Bangladesh": "BD",
+    "Barbados": "BB",
+    "Belarus": "BY",
+    "Belgium": "BE",
+    "Belize": "BZ",
+    "Benin": "BJ",
+    "Bermuda": "BM",
+    "Bhutan": "BT",
+    "Bolivia": "BO",
+    "Botswana": "BW",
+    "Brazil": "BR",
+    "Brunei": "BN",
+    "Bulgaria": "BG",
+    "Burkina Faso": "BF",
+    "Burundi": "BI",
+    "Cambodia": "KH",
+    "Cameroon": "CM",
+    "Canada": "CA",
+    "Cape Verde": "CV",
+    "Central African Republic": "CF",
+    "Chad": "TD",
+    "Chile": "CL",
+    "China": "CN",
+    "Colombia": "CO",
+    "Comoros": "KM",
+    "Congo": "CG",
+    "Costa Rica": "CR",
+    "Cote d'Ivoire": "CI",
+    "Croatia": "HR",
+    "Cuba": "CU",
+    "Curacao": "CW",
+    "Cyprus": "CY",
+    "Czechia": "CZ",
+    "Democratic Republic of Congo": "CD",
+    "Denmark": "DK",
+    "Djibouti": "DJ",
+    "Dominica": "DM",
+    "Dominican Republic": "DO",
+    "East Timor": "TL",
+    "Ecuador": "EC",
+    "Egypt": "EG",
+    "El Salvador": "SV",
+    "Equatorial Guinea": "GQ",
+    "Eritrea": "ER",
+    "Estonia": "EE",
+    "Eswatini": "SZ",
+    "Ethiopia": "ET",
+    "Fiji": "FJ",
+    "France": "FR",
+    "French Guiana": "GF",
+    "French Polynesia": "PF",
+    "Gabon": "GA",
+    "Gambia": "GM",
+    "Georgia": "GE",
+    "Germany": "DE",
+    "Ghana": "GH",
+    "Gibraltar": "GI",
+    "Greece": "GR",
+    "Grenada": "GD",
+    "Guadeloupe": "GP",
+    "Guam": "GU",
+    "Guatemala": "GT",
+    "Guernsey": "GG",
+    "Guinea": "GN",
+    "Guinea-Bissau": "GW",
+    "Guyana": "GY",
+    "Haiti": "HT",
+    "Honduras": "HN",
+    "Hong Kong": "HK",
+    "Hungary": "HU",
+    "India": "IN",
+    "Indonesia": "ID",
+    "Iran": "IR",
+    "Iraq": "IQ",
+    "Isle of Man": "IM",
+    "Israel": "IL",
+    "Italy": "IT",
+    "Jamaica": "JM",
+    "Japan": "JP",
+    "Jersey": "JE",
+    "Jordan": "JO",
+    "Kazakhstan": "KZ",
+    "Kenya": "KE",
+    "Kiribati": "KI",
+    "Kosovo": "XK",
+    "Kuwait": "KW",
+    "Kyrgyzstan": "KG",
+    "Laos": "LA",
+    "Latvia": "LV",
+    "Lebanon": "LB",
+    "Lesotho": "LS",
+    "Liberia": "LR",
+    "Libya": "LY",
+    "Liechtenstein": "LI",
+    "Lithuania": "LT",
+    "Luxembourg": "LU",
+    "Macao": "MO",
+    "Madagascar": "MG",
+    "Malawi": "MW",
+    "Malaysia": "MY",
+    "Maldives": "MV",
+    "Mali": "ML",
+    "Malta": "MT",
+    "Martinique": "MQ",
+    "Mauritania": "MR",
+    "Mauritius": "MU",
+    "Mayotte": "YT",
+    "Mexico": "MX",
+    "Moldova": "MD",
+    "Monaco": "MC",
+    "Mongolia": "MN",
+    "Montenegro": "ME",
+    "Montserrat": "MS",
+    "Morocco": "MA",
+    "Mozambique": "MZ",
+    "Myanmar": "MM",
+    "Namibia": "NA",
+    "Nauru": "NR",
+    "Nepal": "NP",
+    "New Caledonia": "NC",
+    "Nicaragua": "NI",
+    "Niger": "NE",
+    "Nigeria": "NG",
+    "Niue": "NU",
+    "North Korea": "KP",
+    "North Macedonia": "MK",
+    "Norway": "NO",
+    "Oman": "OM",
+    "Pakistan": "PK",
+    "Palau": "PW",
+    "Palestine": "PS",
+    "Panama": "PA",
+    "Papua New Guinea": "PG",
+    "Paraguay": "PY",
+    "Peru": "PE",
+    "Philippines": "PH",
+    "Portugal": "PT",
+    "Puerto Rico": "PR",
+    "Qatar": "QA",
+    "Reunion": "RE",
+    "Romania": "RO",
+    "Russia": "RU",
+    "Saint Barthelemy": "BL",
+    "Saint Helena": "SH",
+    "Saint Lucia": "LC",
+    "Samoa": "WS",
+    "San Marino": "SM",
+    "Saudi Arabia": "SA",
+    "Senegal": "SN",
+    "Serbia": "RS",
+    "Seychelles": "SC",
+    "Sierra Leone": "SL",
+    "Singapore": "SG",
+    "Slovakia": "SK",
+    "Slovenia": "SI",
+    "Somalia": "SO",
+    "South Africa": "ZA",
+    "South Korea": "KR",
+    "South Sudan": "SS",
+    "Spain": "ES",
+    "Sri Lanka": "LK",
+    "Sudan": "SD",
+    "Suriname": "SR",
+    "Sweden": "SE",
+    "Syria": "SY",
+    "Taiwan": "TW",
+    "Tajikistan": "TJ",
+    "Tanzania": "TZ",
+    "Togo": "TG",
+    "Tokelau": "TK",
+    "Tonga": "TO",
+    "Tunisia": "TN",
+    "Turkey": "TR",
+    "Turkmenistan": "TM",
+    "Tuvalu": "TV",
+    "Ukraine": "UA",
+    "United Arab Emirates": "AE",
+    "United Kingdom": "GB",
+    "United States": "US",
+    "Uruguay": "UY",
+    "Uzbekistan": "UZ",
+    "Vanuatu": "VU",
+    "Venezuela": "VE",
+    "Vietnam": "VN",
+    "Western Sahara": "EH",
+    "Yemen": "YE",
+    "Zambia": "ZM",
+    "Zimbabwe": "ZW"
+  };
+  
 const PopulationChart = ({ data, selectedYear, sortType, selectedMode }) => {
     const chartRef = useRef();
-
+    let dynamicFontSize = 10;
     const onLoad = (chartInstance) => {
         chartRef.current = chartInstance;
     };
@@ -194,7 +398,8 @@ const PopulationChart = ({ data, selectedYear, sortType, selectedMode }) => {
                 color: '#333',
                 font: {
                     weight: 'bold',
-                    size: 10, 
+                    size: dynamicFontSize, 
+                    
                 },
                 offset: 0,
             },
@@ -220,30 +425,31 @@ const PopulationChart = ({ data, selectedYear, sortType, selectedMode }) => {
             sortedData.forEach((item, index) => {
                 const flagImage = new Image();
                 const bar = chart.getDatasetMeta(0).data[index];
+                const width = bar.width; // Use the width of the bar : big (horizontal)
+                const height = bar.height; // Use the height of the bar : small (vertical)
+                dynamicFontSize = height / 3;
                 const barX = bar.x; // Use the x property to get the x-position
                 const barY = bar.y; // Use the x property to get the x-position
 
-                // console.log(bar);
+                console.log(bar);
                 // console.log("barX",barX);
-
                 // https://flagcdn.com/16x12/ua.png
 
-               
                 console.log("item.countryName",item.countryName);
-
-                // flagImage.src = `https://flagcdn.com/16x12/${item.countryCode.toLowerCase()}.png`;
-                flagImage.src = `https://flagcdn.com/16x12/ua.png`;
-                console.log(flagImage);
+                const countryCode = countryCodes[item.countryName];
+                flagImage.src = `https://flagcdn.com/16x12/${countryCode.toLowerCase()}.png`;
+                // flagImage.src = `https://flagcdn.com/16x12/ua.png`;
+                // console.log(flagImage); //hereeeee
                 // console.log(item.countryName);
                 // console.log(item.population);
+                let heightFlag = height/1.5;
                 let xPos = barX - 20;
-                let yPos = barY - 5;
+                let yPos = barY - height/2.8;
                 // let xPos = xAxis.getPixelForValue(item.countryName);
-                // console.log(xPos);
                 // let yPos = yAxis.getPixelForValue(item.population);
           
 
-                ctx.drawImage(flagImage, xPos - 20, yPos , 16, 12);// Adjust the positioning as needed
+                ctx.drawImage(flagImage, xPos, yPos ,16 , heightFlag);// Adjust the positioning as needed
             });
         }
     };
