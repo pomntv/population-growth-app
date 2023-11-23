@@ -189,13 +189,14 @@ const PopulationChart = ({ data, selectedYear, sortType, selectedMode }) => {
                 display: true,
                 color: 'black',
                 align: 'end',
-                formatter: Math.round,
+                formatter: (value) => value.toLocaleString(),
                 anchor: 'end',
                 color: '#333',
                 font: {
                     weight: 'bold',
+                    size: 10, 
                 },
-                offset: 10,
+                offset: 0,
             },
         },
     };
