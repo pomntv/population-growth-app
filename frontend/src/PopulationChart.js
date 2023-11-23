@@ -1,10 +1,30 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const PopulationChart = ({ data, selectedYear, sortType, selectedMode }) => {
+    const chartRef = useRef();
+
+    const onLoad = (chartInstance) => {
+        chartRef.current = chartInstance;
+    };
+
+    useEffect(() => {
+        const resizeChart = () => {
+            if (chartRef.current) {
+                chartRef.current.resize();
+            }
+        };
+
+        window.addEventListener('resize', resizeChart);
+
+        return () => {
+            window.removeEventListener('resize', resizeChart);
+        };
+    }, []);
+
     const filteredData = data.filter((item) => item.year === selectedYear);
 
     const sortData = (data) => {
@@ -71,7 +91,7 @@ const PopulationChart = ({ data, selectedYear, sortType, selectedMode }) => {
 
     let label = '';
     let chartDataArray = [];
-    
+
     if (selectedMode === 'Population') {
         label = 'Population';
         chartDataArray = sortedData.map((item) => item.population);
@@ -146,13 +166,13 @@ const PopulationChart = ({ data, selectedYear, sortType, selectedMode }) => {
     const chartData = {
         labels: sortedData.map((item) => item.countryName),
         datasets: [
-          {
-            label: label,
-            data: chartDataArray,
-            backgroundColor: 'rgba(75, 192, 192, 0.6)',
-          },
+            {
+                label: label,
+                data: chartDataArray,
+                backgroundColor: 'rgba(75, 192, 192, 0.6)',
+            },
         ],
-      };
+    };
 
     const chartOptions = {
         indexAxis: 'y',
@@ -167,7 +187,7 @@ const PopulationChart = ({ data, selectedYear, sortType, selectedMode }) => {
         plugins: {
             datalabels: {
                 display: true,
-                color: "black",
+                color: 'black',
                 align: 'end',
                 formatter: Math.round,
                 anchor: 'end',
@@ -176,14 +196,13 @@ const PopulationChart = ({ data, selectedYear, sortType, selectedMode }) => {
                     weight: 'bold',
                 },
                 offset: 10,
-                
             },
         },
     };
 
     return (
         <div className="chart-container">
-            <Bar data={chartData} options={chartOptions} plugins={[ChartDataLabels]}/>
+            <Bar ref={chartRef} data={chartData} options={chartOptions} plugins={[ChartDataLabels]} onLoad={onLoad} />
         </div>
     );
 };
