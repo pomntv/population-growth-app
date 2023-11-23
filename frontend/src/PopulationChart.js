@@ -223,23 +223,27 @@ const PopulationChart = ({ data, selectedYear, sortType, selectedMode }) => {
                 const barX = bar.x; // Use the x property to get the x-position
                 const barY = bar.y; // Use the x property to get the x-position
 
-                console.log(bar);
-                console.log("barX",barX);
+                // console.log(bar);
+                // console.log("barX",barX);
 
                 // https://flagcdn.com/16x12/ua.png
+
+               
+                console.log("item.countryName",item.countryName);
+
                 // flagImage.src = `https://flagcdn.com/16x12/${item.countryCode.toLowerCase()}.png`;
                 flagImage.src = `https://flagcdn.com/16x12/ua.png`;
                 console.log(flagImage);
-                console.log(item.countryName);
-                console.log(item.population);
-                let xPos = barX;
-                let yPos = barY;
+                // console.log(item.countryName);
+                // console.log(item.population);
+                let xPos = barX - 20;
+                let yPos = barY - 5;
                 // let xPos = xAxis.getPixelForValue(item.countryName);
                 // console.log(xPos);
                 // let yPos = yAxis.getPixelForValue(item.population);
           
 
-                ctx.drawImage(flagImage, xPos, yPos, 16, 12);// Adjust the positioning as needed
+                ctx.drawImage(flagImage, xPos - 20, yPos , 16, 12);// Adjust the positioning as needed
             });
         }
     };
