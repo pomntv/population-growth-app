@@ -1,7 +1,7 @@
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
-
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const PopulationChart = ({ data, selectedYear, sortType, selectedMode }) => {
@@ -144,15 +144,15 @@ const PopulationChart = ({ data, selectedYear, sortType, selectedMode }) => {
     }
 
     const chartData = {
-        labels: sortedData.map(item => item.countryName),
+        labels: sortedData.map((item) => item.countryName),
         datasets: [
-            {
-                label: label,
-                data: chartDataArray,
-                backgroundColor: 'rgba(75, 192, 192, 0.6)',
-            },
+          {
+            label: label,
+            data: chartDataArray,
+            backgroundColor: 'rgba(75, 192, 192, 0.6)',
+          },
         ],
-    };
+      };
 
     const chartOptions = {
         indexAxis: 'y',
@@ -164,11 +164,26 @@ const PopulationChart = ({ data, selectedYear, sortType, selectedMode }) => {
                 beginAtZero: true,
             },
         },
+        plugins: {
+            datalabels: {
+                display: true,
+                color: "black",
+                align: 'end',
+                formatter: Math.round,
+                anchor: 'end',
+                color: '#333',
+                font: {
+                    weight: 'bold',
+                },
+                offset: 10,
+                
+            },
+        },
     };
 
     return (
         <div className="chart-container">
-            <Bar data={chartData} options={chartOptions} />
+            <Bar data={chartData} options={chartOptions} plugins={[ChartDataLabels]}/>
         </div>
     );
 };
