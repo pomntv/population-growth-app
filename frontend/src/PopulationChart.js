@@ -199,7 +199,51 @@ const PopulationChart = ({ data, selectedYear, sortType, selectedMode }) => {
                 offset: 0,
             },
         },
+        animation: {
+            // onComplete: () => {
+            //     drawFlagImages();
+            // },
+            onProgress: () => {
+                drawFlagImages();
+            },
+        },
     };
+
+    const drawFlagImages = () => {
+        const chart = chartRef.current;
+        
+        if (chart) {
+            const ctx = chart.ctx;
+            const xAxis = chart.scales['x-axis-0'];
+            const yAxis = chart.scales['y-axis-0'];
+    
+            sortedData.forEach((item, index) => {
+                const flagImage = new Image();
+                const bar = chart.getDatasetMeta(0).data[index];
+                const barX = bar.x; // Use the x property to get the x-position
+                const barY = bar.y; // Use the x property to get the x-position
+
+                console.log(bar);
+                console.log("barX",barX);
+
+                // https://flagcdn.com/16x12/ua.png
+                // flagImage.src = `https://flagcdn.com/16x12/${item.countryCode.toLowerCase()}.png`;
+                flagImage.src = `https://flagcdn.com/16x12/ua.png`;
+                console.log(flagImage);
+                console.log(item.countryName);
+                console.log(item.population);
+                let xPos = barX;
+                let yPos = barY;
+                // let xPos = xAxis.getPixelForValue(item.countryName);
+                // console.log(xPos);
+                // let yPos = yAxis.getPixelForValue(item.population);
+          
+
+                ctx.drawImage(flagImage, xPos, yPos, 16, 12);// Adjust the positioning as needed
+            });
+        }
+    };
+    
 
     return (
         <div className="chart-container">
